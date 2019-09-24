@@ -192,25 +192,25 @@ int main (void)
 
 		else if(ball_in_double_left == 1){
 			cout<<"turn double left"<<"\n";
-			pi.move_bot(GOleft,3.5*second,440);
+			pi.move_bot(GOleft,3.0*second,440);
 			//usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_double_right == 1){
 			cout<<"turn double right"<<"\n";
-			pi.move_bot(GOright,3.5*second,440);
+			pi.move_bot(GOright,3.0*second,440);
 			usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_triple_left == 1){
 			cout<<"turn triple left"<<"\n";
-			pi.move_bot(GOleft,4.5*second,440);
+			pi.move_bot(GOleft,3.5*second,440);
 			//usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_triple_right == 1){
 			cout<<"turn triple right"<<"\n";
-			pi.move_bot(GOright,4.5*second,440);
+			pi.move_bot(GOright,3.5*second,440);
 			//usleep(1.0*second);
 			continue;
 		}
@@ -246,10 +246,10 @@ int main (void)
 		}
 		
 		if( ball.y_cord >  175*2 ){
-			pi.move_bot(GObackward,400);
+			pi.move_bot(GObackward,2*second,440);
 		}
-		else if( ball.y_cord < 120*2 ){
-			pi.move_bot(GOforward,400);
+		else if( ball.y_cord < 100*2 ){
+			pi.move_bot(GOforward,420);
 		}
 		else{
 			pi.move_bot(halt,400);
