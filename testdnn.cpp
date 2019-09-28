@@ -26,7 +26,7 @@ using namespace dnn;
 std::vector<std::string> classes;
 int main(int argc, char** argv)
 {
-    i/*CommandLineParser parser(argc, argv, keys);
+    CommandLineParser parser(argc, argv, keys);
     const std::string modelName = parser.get<String>("@alias");
     const std::string zooFile = parser.get<String>("zoo");
     //keys += genPreprocArguments(modelName, zooFile);
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
         parser.printErrors();
         return 1;
     }
-    CV_Assert(!model.empty());i*/
+    CV_Assert(!model.empty());
     Net net = readNet(model, config, framework);
     net.setPreferableBackend(backendId);
     net.setPreferableTarget(targetId);

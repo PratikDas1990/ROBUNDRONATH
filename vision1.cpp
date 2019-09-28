@@ -20,7 +20,6 @@ using namespace cv;
 using namespace std;
 
 double* set_env() {
-//Output array of containing the HSV space values
 	static double env[6];
 
 //Generic variables
