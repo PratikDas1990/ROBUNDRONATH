@@ -1,3 +1,18 @@
+#include <iostream>
+#include <unistd.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <signal.h>
+#include <unistd.h>
+#include <termios.h>
+#include <wiringPi.h>
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -21,6 +36,15 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
  
 int main(int argc,char ** argv)
 {
+	
+	//IplImage* frame_from_camera = 0;    	
+	CvCapture* capture = 0;
+	Mat frame;
+	
+	//capture = cvCaptureFromCAM(0);//Initiate CvCapture structure for reading a video stream from the camera
+	//cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_WIDTH, 640 );
+	//cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_HEIGHT, 480 );
+	
     CV_TRACE_FUNCTION();
     String modelTxt = "MobileNetSSD_deploy.prototxt";
     String modelBin = "MobileNetSSD_deploy.caffemodel";
@@ -37,13 +61,15 @@ int main(int argc,char ** argv)
 	
 	
 	
-  VideoCapture cap(0);
+    cv::VideoCapture cap(0);
+  cap.set(CAP_PROP_FRAME_WIDTH,320);
+  cap.set(CAP_PROP_FRAME_HEIGHT,240);
   if (!cap.isOpened()) {
     cerr << "ERROR: Unable to open the camera" << endl;
     return 0;
   }
- 
-  Mat frame;
+  //frame = cvQueryFrame( capture );//get a single frame in IplImage format
+  //frame = cv::cvarrToMat(frame_from_camera);//convert IplImage to cv::mat 
   cout << "Start grabbing, press a key on Live window to terminate" << endl;
   while(1) {
     cap >> frame;
@@ -52,8 +78,8 @@ int main(int argc,char ** argv)
         break;
     }    
     Mat img2;
-    resize(frame, img2, Size(300,300));
-    Mat inputBlob = blobFromImage(img2, 0.007843, Size(300,300), Scalar(127.5, 127.5, 127.5), false);
+    resize(frame, img2, Size(240,240));
+    Mat inputBlob = blobFromImage(img2, 0.007843, Size(240,240), Scalar(127.5, 127.5, 127.5), false);
 
     net.setInput(inputBlob, "data");
     Mat detection = net.forward("detection_out");
