@@ -54,6 +54,7 @@ private:
 	std::vector<cv::Vec3f> v3fCircles;// 3 element vector of floats, this will be the pass by reference output of HoughCircles()
 	const long int second         = 100000;
 	double* set_env(void);
+	double* set_env_rgb(void);
 	int find_balls();
 
 public:

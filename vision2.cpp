@@ -38,8 +38,7 @@ vision::vision(){
 		std::cout<<"Value:"<<env[4]<<" - "<<env[5]<<endl;*/
 	}
 	else{
-		
-		env[0]= 50.0;
+		env[0]= 35.0;
 		env[1]= 100.0;
 		env[2]= 125.0;
 		env[3]= 255.0;
@@ -71,7 +70,7 @@ double* vision::set_env() {
 	int lowB = 25;					// Set Value
 	int highB = 255;
 	
-	int lowH = 50;					// Set Hue
+	int lowH = 35;					// Set Hue
 	int highH = 100;
 
 	int lowS = 125;					// Set Saturation
@@ -80,6 +79,14 @@ double* vision::set_env() {
 	int lowV = 33;					// Set Value
 	int highV = 163;
 
+	//int lowH = 0;					// Set Hue
+	//int highH = 8;
+
+	//int lowS = 210;					// Set Saturation
+	//int highS = 255;
+
+	//int lowV = 51;					// Set Value
+	//int highV = 105;
 	
 	while (charCheckForEscKey != 27 ) {		// until the Esc is pressed or webcam connection is lost
 
@@ -155,6 +162,107 @@ double* vision::set_env() {
 
 	env[4] = lowV;
 	env[5] = highV;
+
+	/*std::cout<<"set_env"<<endl;
+	std::cout<<"Hue:"<<env[0]<<" - "<<env[1]<<endl;
+	std::cout<<"Saturation:"<<env[2]<<" - "<<env[3]<<endl;
+	std::cout<<"Value:"<<env[4]<<" - "<<env[5]<<endl;*/
+
+	return env;											
+}
+double* vision::set_env_rgb() {
+//Output array of containing the HSV space values
+	static double env[6];
+
+//Generic variables
+	char charCheckForEscKey = 0;
+	unsigned char key;
+	int count = 0;
+	
+	int lowR = 0;					// Set Hue
+	int highR = 255;
+
+	int lowG = 0;					// Set Saturation
+	int highG = 255;
+
+
+	int lowB = 0;					// Set Saturation
+	int highB = 255;
+	
+	while (charCheckForEscKey != 27 ) {		// until the Esc is pressed or webcam connection is lost
+
+        	frame = cvQueryFrame( capture );//get a single frame in IplImage format
+        	if( !frame ){
+			std::cout<<"Could not fetch frame"<<endl;
+			break;
+		} 
+		imgOriginal = cv::cvarrToMat(frame);//convert IplImage to cv::mat
+		//cv::cvtColor(imgOriginal, hsvImg, CV_BGR2HSV);			// Convert Original Image to HSV Thresh Image
+
+		cv::inRange(imgOriginal, cv::Scalar(lowB, lowG, lowR), cv::Scalar(highB, highG, highR), threshImg);
+
+		cv::GaussianBlur(threshImg, threshImg, cv::Size(9, 9), 0);			//Blur Effect
+		cv::dilate(threshImg, threshImg, 0);						// Dilate Filter Effect
+		cv::erode(threshImg, threshImg, 0);						// Erode Filter Effect
+		//cv::Canny(threshImg, threshImg, 50, 100, 3);
+		// fill circles vector with all circles in processed image
+		cv::HoughCircles(threshImg,v3fCircles,CV_HOUGH_GRADIENT,2,threshImg.rows / 3,150,40,0,300);  // algorithm for detecting circles		
+		if(v3fCircles.size() == 0){
+			std::cout<<"Ball not found"<<endl;
+		}
+		for (int i = 0; i < v3fCircles.size(); i++) {				// for each circle
+															
+			std::cout << "Ball position X = "<< v3fCircles[i][0] // x position of center point of circle
+				<<",\tY = "<< v3fCircles[i][1]	 	// y position of center point of circle
+				<<",\tRadius = "<< v3fCircles[i][2]<< "\n";	// radius of circle
+
+										// draw small green circle at center of object detected
+			cv::circle(imgOriginal,						// draw on original image
+				cv::Point((int)v3fCircles[i][0], (int)v3fCircles[i][1]), // center point of circle
+				3,							// radius of circle in pixels
+				cv::Scalar(0, 255, 0),					// draw green
+				CV_FILLED);						// thickness
+
+																				// draw red circle around object detected 
+			cv::circle(imgOriginal,						// draw on original image
+				cv::Point((int)v3fCircles[i][0], (int)v3fCircles[i][1]),// center point of circle
+				(int)v3fCircles[i][2],					// radius of circle in pixels
+				cv::Scalar(0, 0, 255),					// draw red
+				3);							// thickness
+		}	
+
+		// declare windows
+		cv::namedWindow("imgOriginal", CV_WINDOW_NORMAL);
+		cv::namedWindow("threshImg", CV_WINDOW_NORMAL);	
+
+	    /* Create trackbars in "threshImg" window to adjust according to object and environment.*/
+		cv::createTrackbar("LowR", "threshImg", &lowR, 179);	//Hue (0 - 179)
+		cv::createTrackbar("HighR", "threshImg", &highR, 179);
+
+		cv::createTrackbar("LowG", "threshImg", &lowG, 255);	//Saturation (0 - 255)
+		cv::createTrackbar("HighG", "threshImg", &highG, 255);
+
+		cv::createTrackbar("LowB", "threshImg", &lowB, 255);	//Value (0 - 255)
+		cv::createTrackbar("HighB", "threshImg", &highB, 255);
+		
+
+		cv::imshow("imgOriginal", imgOriginal);					// show windows
+		cv::imshow("threshImg", threshImg);
+
+		charCheckForEscKey = cv::waitKey(1);					// delay and get key press
+	}
+	cvReleaseCapture( &capture );
+	cvDestroyWindow( "imgOriginal" );
+	cvDestroyWindow( "threshImg" ); 
+
+	env[0] = lowR;
+	env[1] = highR;
+	
+	env[2] = lowG;
+	env[3] = highG;
+
+	env[4] = lowB;
+	env[5] = highB;
 
 	/*std::cout<<"set_env"<<endl;
 	std::cout<<"Hue:"<<env[0]<<" - "<<env[1]<<endl;
