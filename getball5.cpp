@@ -92,7 +92,7 @@ int main (void)
 	
 	direction = 0;
 	look_x   = 90;
-	look_y   = 110;
+	look_y   = 90;
 	pi.look(look_x,look_y);;
 
 	while(1){
@@ -245,10 +245,10 @@ int main (void)
 
 		}
 		
-		if( ball.y_cord >  175*2 ){
+		if( ball.y_cord >  170*2 ){
 			pi.move_bot(GObackward,2*second,440);
 		}
-		else if( ball.y_cord < 100*2 ){
+		else if( ball.y_cord < 150*2 ){
 			pi.move_bot(GOforward,420);
 		}
 		else{
