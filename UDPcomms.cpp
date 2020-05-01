@@ -39,8 +39,8 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 
 void UDPcomms::client()
 {
-    int idx_class[1];
-    int idx;
+    char idx_class[BUF_LEN];
+
     string servAddress = "192.168.0.200";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
@@ -77,7 +77,7 @@ void UDPcomms::client()
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
             sock.recvFrom(idx_class,sizeof(int), servAddress, servPort);
-	    idx = idx_class[1];
+	    int idx = ((int * ) idx_class)[0];
 	    cout << CLASSES[idx] << endl;
             waitKey(FRAME_INTERVAL);
 
