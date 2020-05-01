@@ -39,6 +39,8 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 
 void UDPcomms::client()
 {
+    int idx_class[1];
+    int idx;
     string servAddress = "192.168.0.200";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
@@ -74,7 +76,9 @@ void UDPcomms::client()
 
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
-
+            sock.recvFrom(idx_class,sizeof(int), servAddress, servPort);
+	    idx = idx_class[1];
+	    cout << CLASSES[idx] << endl;
             waitKey(FRAME_INTERVAL);
 
             clock_t next_cycle = clock();
@@ -162,6 +166,7 @@ void UDPcomms::serverDNN()
         int recvMsgSize; // Size of received message
         string sourceAddress; // Address of datagram source
         unsigned short sourcePort; // Port of datagram source
+	int idx_class[1];
 
         clock_t last_cycle = clock();
         //Define DNN Model
@@ -235,6 +240,8 @@ void UDPcomms::serverDNN()
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
 
 				cout << CLASSES[idx] << ": " << confidence << endl;
+				idx_class[0] = idx;
+				sock.sendTo(idx_class, sizeof(int), sourceAddress, sourcePort);
 
 				ss.str("");
 				ss << confidence;
