@@ -78,12 +78,21 @@ void UDPcomms::client()
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
-	    cout << endl <<CLASSES[idx] << endl;
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int total_objects = ((int * ) idx_class)[0];
-	    cout << "total objects = "<<total_objects << endl;
-            cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
-            cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
+	    int xLeftBottom = ((int * ) idx_class)[0];
+            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
+	    int yLeftBottom = ((int * ) idx_class)[0];
+            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
+	    int xRightTop = ((int * ) idx_class)[0];
+	    sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
+	    int yRightTop = ((int * ) idx_class)[0];
+
+	    cout << endl <<CLASSES[idx] <<":" << xLeftBottom<<","<<yLeftBottom<<","<<xRightTop<<","<<yRightTop<<endl;
+            //sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
+	    //int total_objects = ((int * ) idx_class)[0];
+	    //cout << "total objects = "<<total_objects << endl;
+            //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
+            //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
             waitKey(FRAME_INTERVAL);
 
             clock_t next_cycle = clock();
@@ -256,6 +265,10 @@ void UDPcomms::serverDNN()
 
 				idx_class[i+1] = idx;
 				sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&xRightTop, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&yRightTop, sizeof(int), sourceAddress, sourcePort);
 
 				ss.str("");
 				ss << confidence;
@@ -267,8 +280,8 @@ void UDPcomms::serverDNN()
 				FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
 			}
 		}
-		cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
-                sock.sendTo(&idx_class[10], 10*sizeof(int), sourceAddress, sourcePort);
+		//cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
+                //sock.sendTo(&idx_class[10], 10*sizeof(int), sourceAddress, sourcePort);
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
