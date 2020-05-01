@@ -74,17 +74,20 @@ void UDPcomms::client()
             int ibuf[1];
             ibuf[0] = total_pack;
             sock.sendTo(ibuf, sizeof(int), servAddress, servPort);
-
+            //cout << "encoded.size() = "<<encoded.size()<<endl;       
+	    //cout << "PACK_SIZE = "<<PACK_SIZE<<endl;
+	    //cout << "sizeof(int) = "<<sizeof(int)<<endl;  
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
+   
             int signal = 0;
-            sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-            signal = ((int * ) buffer_class)[0];
-	    if(signal == 444){
+            //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+            //signal = ((int * ) buffer_class)[0];
+	    //if(signal == 444){
                sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
        	       int total_objects = ((int * ) buffer_class)[0];
                cout << "total_objects = "<<total_objects<<endl;
-	       if(total_objects > 0 && total_objects < 10){
+	       /*if(total_objects > 0 && total_objects < 10){
 		 signal = 0;
                  sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
                  signal = ((int * ) buffer_class)[0];
@@ -96,7 +99,7 @@ void UDPcomms::client()
                  }
 	         cout << endl <<CLASSES[idx[0]] <<":" << idx[1]<<","<<idx[2]<<","<<idx[3]<<","<<idx[4]<<endl;
                }
-	     }
+	     }*/
 
             /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
@@ -262,8 +265,8 @@ void UDPcomms::serverDNN()
 		float confidenceThreshold = 0.2;
                 idx_class[0] = detectionMat.rows;
 		cout<<"No. of objects = "<< detectionMat.rows<<endl;
-		int signal = 444;
-		sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
+		//int signal = 444;
+		//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
                 sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
 		for (int i = 0; i < detectionMat.rows ; i++)
 		{
@@ -290,10 +293,10 @@ void UDPcomms::serverDNN()
                                 cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
 
 				idx_class[i+1] = idx;
-				signal = 555;
-				sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
-				for (int i = 0; i < 5; i++)
-					sock.sendTo(& obj[i],sizeof(int), sourceAddress, sourcePort);
+				//signal = 555;
+				//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
+				//for (int i = 0; i < 5; i++)
+				//	sock.sendTo(& obj[i],sizeof(int), sourceAddress, sourcePort);
 				/*sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
