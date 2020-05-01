@@ -268,7 +268,7 @@ void UDPcomms::serverDNN()
 			}
 		}
 		cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
-                sock.sendTo(idx_class, sizeof(int), sourceAddress, sourcePort);
+                sock.sendTo(&idx_class[10], 10*sizeof(int), sourceAddress, sourcePort);
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
