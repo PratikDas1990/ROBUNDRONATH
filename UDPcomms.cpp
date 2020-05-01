@@ -78,14 +78,14 @@ void UDPcomms::client()
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
-	    cout << CLASSES[idx] << endl;
+	    cout << endl <<CLASSES[idx] << endl;
             waitKey(FRAME_INTERVAL);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
-            cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
+            //cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
 
-            cout << next_cycle - last_cycle;
+            //cout << next_cycle - last_cycle;
             last_cycle = next_cycle;
         }
         // Destructor closes the socket
@@ -260,7 +260,7 @@ void UDPcomms::serverDNN()
 		waitKey(1);
 		clock_t next_cycle = clock();
 		double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
-		cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
+		//cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
 		free(longbuf);
 		cout << next_cycle - last_cycle;
 		last_cycle = next_cycle;
