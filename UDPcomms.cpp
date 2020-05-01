@@ -80,6 +80,23 @@ void UDPcomms::client()
             int signal = 0;
             sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
             signal = ((int * ) buffer_class)[0];
+	    if(signal == 444){
+               sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+       	       int total_objects = ((int * ) buffer_class)[0];
+	       if(total_objects > 0){
+                 sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+                 signal = ((int * ) buffer_class)[0];
+                 if(signal == 555){
+	           for (int i = 0; i < 5 ; i++) {
+       	             sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+       	             idx[i] = ((int * ) buffer_class)[0];
+      	           }
+                 }
+               }
+	     }
+
+
+
             if(signal == 555){
 	      for (int i = 0; i < 5 ; i++) {
        	         sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
@@ -103,7 +120,7 @@ void UDPcomms::client()
 	    //cout << "total objects = "<<total_objects << endl;
             //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
             //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL*100);
+            waitKey(FRAME_INTERVAL*10);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
@@ -249,7 +266,11 @@ void UDPcomms::serverDNN()
 		ostringstream ss;
 		float confidenceThreshold = 0.2;
                 idx_class[0] = detectionMat.rows;
-		for (int i = 0; i < detectionMat.rows; i++)
+		cout<<"No. of objects = "<< detectionMat.rows<<endl;
+		int signal = 444;
+		sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
+                sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
+		for (int i = 0; i < detectionMat.rows && detectionMat.rows!=0 ; i++)
 		{
 			float confidence = detectionMat.at<float>(i, 2);
 			if (confidence > confidenceThreshold)
@@ -274,7 +295,7 @@ void UDPcomms::serverDNN()
                                 cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
 
 				idx_class[i+1] = idx;
-				int signal = 555;
+				signal = 555;
 				sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
 				for (int i = 0; i < 5; i++)
 					sock.sendTo(& obj[i],sizeof(int), sourceAddress, sourcePort);
