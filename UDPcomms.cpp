@@ -118,7 +118,7 @@ void UDPcomms::client()
 	    //cout << "total objects = "<<total_objects << endl;
             //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
             //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL);
+            waitKey(FRAME_INTERVAL*20);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
@@ -205,7 +205,12 @@ void UDPcomms::serverDNN()
         int recvMsgSize; // Size of received message
         string sourceAddress; // Address of datagram source
         unsigned short sourcePort; // Port of datagram source
-	int idx_class[10];
+	int object_class[16];
+        int count;   
+ 
+        for(int i = 0 ; i < 13 ; i++)
+		object_class[i] = 0;
+        object_class[0] = 444;
 
         clock_t last_cycle = clock();
         //Define DNN Model
@@ -226,6 +231,7 @@ void UDPcomms::serverDNN()
 
         while (1) {
             // Block until receive message from a client
+            count = 0;
             do {
                 recvMsgSize = sock.recvFrom(buffer, BUF_LEN, sourceAddress, sourcePort);
             } while (recvMsgSize > sizeof(int));
@@ -263,7 +269,7 @@ void UDPcomms::serverDNN()
 
 		ostringstream ss;
 		float confidenceThreshold = 0.2;
-                idx_class[0] = detectionMat.rows;
+                //idx_class[0] = detectionMat.rows;
 		cout<<"No. of objects = "<< detectionMat.rows<<endl;
 		//int signal = 444;
 		//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
@@ -273,26 +279,34 @@ void UDPcomms::serverDNN()
 			float confidence = detectionMat.at<float>(i, 2);
 			if (confidence > confidenceThreshold)
 			{
+				count = count + 1;
 				int idx = static_cast<int>(detectionMat.at<float>(i, 1));
-				int obj[5];
 				int xLeftBottom = static_cast<int>(detectionMat.at<float>(i, 3) * frame.cols);
 				int yLeftBottom = static_cast<int>(detectionMat.at<float>(i, 4) * frame.rows);
 				int xRightTop = static_cast<int>(detectionMat.at<float>(i, 5) * frame.cols);
 				int yRightTop = static_cast<int>(detectionMat.at<float>(i, 6) * frame.rows);
-				obj[0] = idx;
-				obj[1] = xLeftBottom;
-				obj[2] = yLeftBottom;
-				obj[3] = xRightTop;
-				obj[4] = yRightTop;
+                                if(count < 16)
+				{
+					object_class[count]     = idx;
+					object_class[count + 1] = xLeftBottom;
+					object_class[count + 2] = yLeftBottom;
+					object_class[count + 3] = xRightTop;
+					object_class[count + 4] = yRightTop;
+        	                        count = count + 5;
+				}
 
 				Rect object((int)xLeftBottom, (int)yLeftBottom,(int)(xRightTop - xLeftBottom),(int)(yRightTop - yLeftBottom));
 
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
 
-				cout << i<<">"<<CLASSES[obj[0]] << ": " << confidence << endl;
-                                cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
+				cout << i<<">"<<CLASSES[i] << ": " << confidence << endl;
+                                cout << "Loc : "<<object_class[count - 4]
+				<<","<<object_class[count - 3]
+				<<","<<object_class[count - 2]
+				<<","<<object_class[count - 1]
+				<<endl;
 
-				idx_class[i+1] = idx;
+				//idx_class[i+1] = idx;
 				//signal = 555;
 				//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
 				//for (int i = 0; i < 5; i++)
