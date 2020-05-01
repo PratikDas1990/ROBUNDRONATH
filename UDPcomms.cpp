@@ -39,7 +39,8 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 
 void UDPcomms::client()
 {
-    char idx_class[BUF_LEN];
+    char buffer_class[BUF_LEN];
+    int idx[5];
 
     string servAddress = "192.168.0.200";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
@@ -76,7 +77,13 @@ void UDPcomms::client()
 
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
-            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
+
+
+            for (int i = 0; i < 5; i++) {
+                sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
+                idx[i] = ((int * ) buffer_class)[0];
+            }
+            /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int xLeftBottom = ((int * ) idx_class)[0];
@@ -85,15 +92,15 @@ void UDPcomms::client()
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int xRightTop = ((int * ) idx_class)[0];
 	    sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int yRightTop = ((int * ) idx_class)[0];
+	    int yRightTop = ((int * ) idx_class)[0];*/
 
-	    cout << endl <<CLASSES[idx] <<":" << xLeftBottom<<","<<yLeftBottom<<","<<xRightTop<<","<<yRightTop<<endl;
+	    cout << endl <<CLASSES[idx[0]] <<":" << idx[1]<<","<<idx[2]<<","<<idx[3]<<","<<idx[4]<<endl;
             //sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    //int total_objects = ((int * ) idx_class)[0];
 	    //cout << "total objects = "<<total_objects << endl;
             //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
             //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL);
+            waitKey(FRAME_INTERVAL*100);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
@@ -264,11 +271,14 @@ void UDPcomms::serverDNN()
                                 cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
 
 				idx_class[i+1] = idx;
-				sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
+
+				for (int i = 0; i < 5; i++)
+					sock.sendTo(& obj[i], sizeof(int), sourceAddress, sourcePort);
+				/*sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&xRightTop, sizeof(int), sourceAddress, sourcePort);
-				sock.sendTo(&yRightTop, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&yRightTop, sizeof(int), sourceAddress, sourcePort);*/
 
 				ss.str("");
 				ss << confidence;
