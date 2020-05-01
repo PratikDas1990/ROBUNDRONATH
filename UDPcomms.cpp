@@ -77,12 +77,14 @@ void UDPcomms::client()
 
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
-
+            int signal = 0;
             sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-            int signal = ((int * ) buffer_class)[0];
-            for (int i = 0; i < 5 && signal == 555; i++) {
-                sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-                idx[i] = ((int * ) buffer_class)[0];
+            signal = ((int * ) buffer_class)[0];
+            if(signal == 555){
+	      for (int i = 0; i < 5 ; i++) {
+       	         sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+       	         idx[i] = ((int * ) buffer_class)[0];
+      	      }
             }
             /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
@@ -275,7 +277,7 @@ void UDPcomms::serverDNN()
 				int signal = 555;
 				sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
 				for (int i = 0; i < 5; i++)
-					sock.sendTo(& obj[0],sizeof(int), sourceAddress, sourcePort);
+					sock.sendTo(& obj[i],sizeof(int), sourceAddress, sourcePort);
 				/*sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
