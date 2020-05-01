@@ -85,7 +85,7 @@ void UDPcomms::client()
             sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
             signal = ((int * ) buffer_class)[0];
 	    if(signal == 444){
-              cout << "signal = ",signal;
+              cout << "signal = "<<signal<<endl;
             }
                //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
        	       //int total_objects = ((int * ) buffer_class)[0];
