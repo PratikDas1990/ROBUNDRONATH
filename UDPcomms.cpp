@@ -10,7 +10,6 @@
 #include <signal.h>
 #include <unistd.h>
 #include <termios.h>
-#include <wiringPi.h>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -19,7 +18,6 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/mytest.hpp> 
 #include <opencv2/dnn.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
