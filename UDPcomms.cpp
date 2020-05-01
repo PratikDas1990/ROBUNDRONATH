@@ -81,7 +81,9 @@ void UDPcomms::client()
 	    cout << endl <<CLASSES[idx] << endl;
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int total_objects = ((int * ) idx_class)[0];
-	    cout << "total objects"<<total_objects << endl;
+	    cout << "total objects = "<<total_objects << endl;
+            cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
+            cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
             waitKey(FRAME_INTERVAL);
 
             clock_t next_cycle = clock();
@@ -234,16 +236,24 @@ void UDPcomms::serverDNN()
 			if (confidence > confidenceThreshold)
 			{
 				int idx = static_cast<int>(detectionMat.at<float>(i, 1));
+				int obj[5];
 				int xLeftBottom = static_cast<int>(detectionMat.at<float>(i, 3) * frame.cols);
 				int yLeftBottom = static_cast<int>(detectionMat.at<float>(i, 4) * frame.rows);
 				int xRightTop = static_cast<int>(detectionMat.at<float>(i, 5) * frame.cols);
 				int yRightTop = static_cast<int>(detectionMat.at<float>(i, 6) * frame.rows);
+				obj[0] = idx;
+				obj[1] = xLeftBottom;
+				obj[2] = yLeftBottom;
+				obj[3] = xRightTop;
+				obj[4] = yRightTop;
 
 				Rect object((int)xLeftBottom, (int)yLeftBottom,(int)(xRightTop - xLeftBottom),(int)(yRightTop - yLeftBottom));
 
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
 
-				cout << i<<">"<<CLASSES[idx] << ": " << confidence << endl;
+				cout << i<<">"<<CLASSES[obj[0]] << ": " << confidence << endl;
+                                cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
+
 				idx_class[i+1] = idx;
 				sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 
