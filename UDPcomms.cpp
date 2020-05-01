@@ -254,7 +254,7 @@ void UDPcomms::serverDNN()
 				FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
 			}
 		}
-		cout<<"classes"<<idx_class<<endl;
+		cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
@@ -264,7 +264,7 @@ void UDPcomms::serverDNN()
 		double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
 		//cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
 		free(longbuf);
-		cout << next_cycle - last_cycle;
+		//cout << next_cycle - last_cycle;
 		last_cycle = next_cycle;
 		if (key>=0)
 			break;            
