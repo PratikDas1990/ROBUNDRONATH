@@ -76,7 +76,7 @@ void UDPcomms::client()
 
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
-            sock.recvFrom(idx_class,sizeof(int), servAddress, servPort);
+            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
 	    cout << CLASSES[idx] << endl;
             waitKey(FRAME_INTERVAL);
