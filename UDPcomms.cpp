@@ -241,7 +241,7 @@ void UDPcomms::serverDNN()
 
 				cout << CLASSES[idx] << ": " << confidence << endl;
 				idx_class[0] = idx;
-				sock.sendTo(idx_class, sizeof(int), sourceAddress, sourcePort);
+				sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 
 				ss.str("");
 				ss << confidence;
