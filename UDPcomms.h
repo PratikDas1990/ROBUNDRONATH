@@ -14,5 +14,6 @@ class UDPcomms
 public:
 	void client();
 	void server();
+        void serverDNN();
 };
 #endif

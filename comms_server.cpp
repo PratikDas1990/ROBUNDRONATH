@@ -12,6 +12,6 @@ using namespace cv;
 int main(void)
 {	
 	UDPcomms comm;
-	comm.server();
+	comm.serverDNN();
 	return 0;
 }
