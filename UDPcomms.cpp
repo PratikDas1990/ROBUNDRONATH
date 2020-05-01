@@ -83,7 +83,9 @@ void UDPcomms::client()
 	    if(signal == 444){
                sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
        	       int total_objects = ((int * ) buffer_class)[0];
-	       if(total_objects > 0){
+               cout << "total_objects = "<<total_objects<<endl;
+	       if(total_objects > 0 && total_objects < 10){
+		 signal = 0;
                  sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
                  signal = ((int * ) buffer_class)[0];
                  if(signal == 555){
@@ -92,17 +94,10 @@ void UDPcomms::client()
        	             idx[i] = ((int * ) buffer_class)[0];
       	           }
                  }
+	         cout << endl <<CLASSES[idx[0]] <<":" << idx[1]<<","<<idx[2]<<","<<idx[3]<<","<<idx[4]<<endl;
                }
 	     }
 
-
-
-            if(signal == 555){
-	      for (int i = 0; i < 5 ; i++) {
-       	         sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-       	         idx[i] = ((int * ) buffer_class)[0];
-      	      }
-            }
             /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int idx = ((int * ) idx_class)[0];
             sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
@@ -114,7 +109,7 @@ void UDPcomms::client()
 	    sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    int yRightTop = ((int * ) idx_class)[0];*/
 
-	    cout << endl <<CLASSES[idx[0]] <<":" << idx[1]<<","<<idx[2]<<","<<idx[3]<<","<<idx[4]<<endl;
+	    
             //sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
 	    //int total_objects = ((int * ) idx_class)[0];
 	    //cout << "total objects = "<<total_objects << endl;
@@ -270,7 +265,7 @@ void UDPcomms::serverDNN()
 		int signal = 444;
 		sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
                 sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
-		for (int i = 0; i < detectionMat.rows && detectionMat.rows!=0 ; i++)
+		for (int i = 0; i < detectionMat.rows ; i++)
 		{
 			float confidence = detectionMat.at<float>(i, 2);
 			if (confidence > confidenceThreshold)
