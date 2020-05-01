@@ -42,7 +42,7 @@ void UDPcomms::client()
     char buffer_class[sizeof(int)];
     int idx[5];
 
-    string servAddress = "192.168.0.200";//argv[1]; // First arg: server address
+    string servAddress = "192.168.0.20";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
     try {
