@@ -166,7 +166,7 @@ void UDPcomms::serverDNN()
         int recvMsgSize; // Size of received message
         string sourceAddress; // Address of datagram source
         unsigned short sourcePort; // Port of datagram source
-	int idx_class[1];
+	int idx_class[10];
 
         clock_t last_cycle = clock();
         //Define DNN Model
@@ -224,6 +224,7 @@ void UDPcomms::serverDNN()
 
 		ostringstream ss;
 		float confidenceThreshold = 0.2;
+                idx_class[0] = detectionMat.rows;
 		for (int i = 0; i < detectionMat.rows; i++)
 		{
 			float confidence = detectionMat.at<float>(i, 2);
@@ -239,8 +240,8 @@ void UDPcomms::serverDNN()
 
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
 
-				cout << CLASSES[idx] << ": " << confidence << endl;
-				idx_class[0] = idx;
+				cout << i<<">"<<CLASSES[idx] << ": " << confidence << endl;
+				idx_class[i+1] = idx;
 				sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 
 				ss.str("");
@@ -253,6 +254,7 @@ void UDPcomms::serverDNN()
 				FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
 			}
 		}
+		cout<<"classes"<<idx_class<<endl;
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
