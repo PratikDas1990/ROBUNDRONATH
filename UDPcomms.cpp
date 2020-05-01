@@ -39,7 +39,7 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 
 void UDPcomms::client()
 {
-    char buffer_class[BUF_LEN];
+    char buffer_class[sizeof(int)];
     int idx[5];
 
     string servAddress = "192.168.0.200";//argv[1]; // First arg: server address
@@ -78,9 +78,10 @@ void UDPcomms::client()
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
 
-
-            for (int i = 0; i < 5; i++) {
-                sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
+            sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+            int signal = ((int * ) buffer_class)[0];
+            for (int i = 0; i < 5 && signal == 555; i++) {
+                sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
                 idx[i] = ((int * ) buffer_class)[0];
             }
             /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
@@ -271,9 +272,10 @@ void UDPcomms::serverDNN()
                                 cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
 
 				idx_class[i+1] = idx;
-
+				int signal = 555;
+				sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
 				for (int i = 0; i < 5; i++)
-					sock.sendTo(& obj[i], sizeof(int), sourceAddress, sourcePort);
+					sock.sendTo(& obj[0],sizeof(int), sourceAddress, sourcePort);
 				/*sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
 				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
