@@ -84,9 +84,9 @@ void UDPcomms::client()
             //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
             //signal = ((int * ) buffer_class)[0];
 	    //if(signal == 444){
-               sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-       	       int total_objects = ((int * ) buffer_class)[0];
-               cout << "total_objects = "<<total_objects<<endl;
+               //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
+       	       //int total_objects = ((int * ) buffer_class)[0];
+               //cout << "total_objects = "<<total_objects<<endl;
 	       /*if(total_objects > 0 && total_objects < 10){
 		 signal = 0;
                  sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
@@ -118,7 +118,7 @@ void UDPcomms::client()
 	    //cout << "total objects = "<<total_objects << endl;
             //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
             //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL*10);
+            waitKey(FRAME_INTERVAL);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
@@ -267,7 +267,7 @@ void UDPcomms::serverDNN()
 		cout<<"No. of objects = "<< detectionMat.rows<<endl;
 		//int signal = 444;
 		//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
-                sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
+                //sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
 		for (int i = 0; i < detectionMat.rows ; i++)
 		{
 			float confidence = detectionMat.at<float>(i, 2);
