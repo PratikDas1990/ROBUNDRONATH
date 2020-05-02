@@ -40,16 +40,17 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 void UDPcomms::client()
 {
     char buffer_class[BUF_LEN];
-    int idx[5];
     int buffer_size = 16*sizeof(int);
+    int * object_class = new int[buffer_size];
 
     string servAddress = "192.168.0.20";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
     try {
         UDPSocket sock;
-        int jpegqual =  ENCODE_QUALITY; // Compression Parameter
-
+        int jpegqual =  ENCODE_QUALITY; // Compression Paramete
+	int recvMsgSize; 
+	int signal;
         Mat frame, send;
         vector < uchar > encoded;
         VideoCapture cap(0); // Grab the camera
@@ -77,55 +78,43 @@ void UDPcomms::client()
             sock.sendTo(ibuf, sizeof(int), servAddress, servPort);
             //cout << "encoded.size() = "<<encoded.size()<<endl;       
 	    //cout << "PACK_SIZE = "<<PACK_SIZE<<endl;
-	    //cout << "sizeof(int) = "<<sizeof(int)<<endl;  
+	    //cout << "total_pack = "<<total_pack<<endl;
             for (int i = 0; i < total_pack; i++)
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
    
-            int signal = 0;
-            sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
-            signal = ((int * ) buffer_class)[0];
-	    if(signal == 444){
-              cout << "signal = "<<signal<<endl;
+            signal = 0;
+            recvMsgSize = sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
+	    cout << "recvMsgSize = "<<recvMsgSize<<endl;
+	    if( recvMsgSize != buffer_size ){
+		    cout<<"Wrong packet received"<<endl;
+		    continue;
+	    }
+            
+	    if(((int * ) buffer_class)[0] == 444){
+            	memcpy( & object_class[0], buffer_class, buffer_size);
+            	cout << "object1 = "<<CLASSES[((int * ) object_class)[1]]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[2]<<endl; 
+            	cout << "loc = "<<((int * ) object_class)[3]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[4]<<endl; 
+            	cout << "loc = "<<((int * ) object_class)[5]<<endl; 
+            	cout << "object2 = "<<CLASSES[((int * ) object_class)[6]]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[7]<<endl; 
+            	cout << "loc = "<<((int * ) object_class)[8]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[9]<<endl; 
+            	cout << "loc = "<<((int * ) object_class)[10]<<endl; 
+            	cout << "object3 = "<<CLASSES[((int * ) object_class)[11]]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[12]<<endl; 
+            	cout << "loc = "<<((int * ) object_class)[13]<<endl;
+            	cout << "loc = "<<((int * ) object_class)[14]<<endl; 
+           	cout << "loc = "<<((int * ) object_class)[15]<<endl; 
             }
-               //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-       	       //int total_objects = ((int * ) buffer_class)[0];
-               //cout << "total_objects = "<<total_objects<<endl;
-	       /*if(total_objects > 0 && total_objects < 10){
-		 signal = 0;
-                 sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-                 signal = ((int * ) buffer_class)[0];
-                 if(signal == 555){
-	           for (int i = 0; i < 5 ; i++) {
-       	             sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-       	             idx[i] = ((int * ) buffer_class)[0];
-      	           }
-                 }
-	         cout << endl <<CLASSES[idx[0]] <<":" << idx[1]<<","<<idx[2]<<","<<idx[3]<<","<<idx[4]<<endl;
-               }
-	     }*/
-
-            /*sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int idx = ((int * ) idx_class)[0];
-            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int xLeftBottom = ((int * ) idx_class)[0];
-            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int yLeftBottom = ((int * ) idx_class)[0];
-            sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int xRightTop = ((int * ) idx_class)[0];
-	    sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    int yRightTop = ((int * ) idx_class)[0];*/
 
 	    
-            //sock.recvFrom(idx_class,BUF_LEN, servAddress, servPort);
-	    //int total_objects = ((int * ) idx_class)[0];
-	    //cout << "total objects = "<<total_objects << endl;
-            //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
-            //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL*20);
+            waitKey(FRAME_INTERVAL*10);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
-            //cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
+            cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
 
             //cout << next_cycle - last_cycle;
             last_cycle = next_cycle;

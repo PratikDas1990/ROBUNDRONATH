@@ -98,7 +98,7 @@ void UDPcomms::serverDNN()
 {
     unsigned short servPort = atoi("2000");//(argv[1]); // First arg:  local port
 
-    namedWindow("recv", WINDOW_AUTOSIZE);
+    //namedWindow("recv", WINDOW_AUTOSIZE);
     try {
         UDPSocket sock(servPort);
 
@@ -173,9 +173,6 @@ void UDPcomms::serverDNN()
 		float confidenceThreshold = 0.2;
                 //idx_class[0] = detectionMat.rows;
 		cout<<"No. of objects = "<< detectionMat.rows<<endl;
-		//int signal = 444;
-		//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
-                //sock.sendTo(& detectionMat.rows,sizeof(int), sourceAddress, sourcePort);
 		for (int i = 0; i < detectionMat.rows ; i++)
 		{
 			float confidence = detectionMat.at<float>(i, 2);
@@ -187,37 +184,26 @@ void UDPcomms::serverDNN()
 				int yLeftBottom = static_cast<int>(detectionMat.at<float>(i, 4) * frame.rows);
 				int xRightTop = static_cast<int>(detectionMat.at<float>(i, 5) * frame.cols);
 				int yRightTop = static_cast<int>(detectionMat.at<float>(i, 6) * frame.rows);
-                                if(count < 16)
+                                if(count < 10)
 				{
 					object_class[count]     = idx;
 					object_class[count + 1] = xLeftBottom;
 					object_class[count + 2] = yLeftBottom;
 					object_class[count + 3] = xRightTop;
 					object_class[count + 4] = yRightTop;
-        	                        count = count + 5;
+        	                        count = count + 4;
+					cout << i<<">"<<CLASSES[object_class[count - 4]] << ": " << confidence << endl;
+	                                cout << "Loc : "<<object_class[count - 3]
+					<<","<<object_class[count - 2]
+					<<","<<object_class[count - 1]
+					<<","<<object_class[count - 0]
+					<<endl;
 				}
+				//cout << i<<">"<<CLASSES[idx] << ": " << confidence << endl;
 
 				Rect object((int)xLeftBottom, (int)yLeftBottom,(int)(xRightTop - xLeftBottom),(int)(yRightTop - yLeftBottom));
 
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
-
-				cout << i<<">"<<CLASSES[object_class[count - 5]] << ": " << confidence << endl;
-                                cout << "Loc : "<<object_class[count - 4]
-				<<","<<object_class[count - 3]
-				<<","<<object_class[count - 2]
-				<<","<<object_class[count - 1]
-				<<endl;
-
-				//idx_class[i+1] = idx;
-				//signal = 555;
-				//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
-				//for (int i = 0; i < 5; i++)
-				//	sock.sendTo(& obj[i],sizeof(int), sourceAddress, sourcePort);
-				/*sock.sendTo(&idx, sizeof(int), sourceAddress, sourcePort);
-				sock.sendTo(&xLeftBottom, sizeof(int), sourceAddress, sourcePort);
-				sock.sendTo(&yLeftBottom, sizeof(int), sourceAddress, sourcePort);
-				sock.sendTo(&xRightTop, sizeof(int), sourceAddress, sourcePort);
-				sock.sendTo(&yRightTop, sizeof(int), sourceAddress, sourcePort);*/
 
 				ss.str("");
 				ss << confidence;
@@ -229,8 +215,9 @@ void UDPcomms::serverDNN()
 				FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,0));
 			}
 		}
-		//cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
+
                 sock.sendTo(& object_class[0], buffer_size, sourceAddress, sourcePort);
+
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
