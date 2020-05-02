@@ -39,8 +39,9 @@ string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
 
 void UDPcomms::client()
 {
-    char buffer_class[sizeof(int)];
+    char buffer_class[BUF_LEN];
     int idx[5];
+    int buffer_size = 16*sizeof(int);
 
     string servAddress = "192.168.0.20";//argv[1]; // First arg: server address
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
@@ -81,9 +82,11 @@ void UDPcomms::client()
                 sock.sendTo( & encoded[i * PACK_SIZE], PACK_SIZE, servAddress, servPort);
    
             int signal = 0;
-            //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
-            //signal = ((int * ) buffer_class)[0];
-	    //if(signal == 444){
+            sock.recvFrom(buffer_class, BUF_LEN, servAddress, servPort);
+            signal = ((int * ) buffer_class)[0];
+	    if(signal == 444){
+              cout << "signal = ",signal;
+            }
                //sock.recvFrom(buffer_class, sizeof(int), servAddress, servPort);
        	       //int total_objects = ((int * ) buffer_class)[0];
                //cout << "total_objects = "<<total_objects<<endl;
@@ -118,7 +121,7 @@ void UDPcomms::client()
 	    //cout << "total objects = "<<total_objects << endl;
             //cout << "object1 = "<<((int * ) idx_class)[1]<<endl;
             //cout << "object1 = "<<((int * ) idx_class)[2]<<endl; 
-            waitKey(FRAME_INTERVAL);
+            waitKey(FRAME_INTERVAL*20);
 
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
@@ -205,7 +208,13 @@ void UDPcomms::serverDNN()
         int recvMsgSize; // Size of received message
         string sourceAddress; // Address of datagram source
         unsigned short sourcePort; // Port of datagram source
-	int idx_class[10];
+	int object_class[16];
+        int count;   
+	int buffer_size = 16*sizeof(int);
+ 
+        for(int i = 0 ; i < 13 ; i++)
+		object_class[i] = 0;
+        object_class[0] = 444;
 
         clock_t last_cycle = clock();
         //Define DNN Model
@@ -226,6 +235,7 @@ void UDPcomms::serverDNN()
 
         while (1) {
             // Block until receive message from a client
+            count = 0;
             do {
                 recvMsgSize = sock.recvFrom(buffer, BUF_LEN, sourceAddress, sourcePort);
             } while (recvMsgSize > sizeof(int));
@@ -263,7 +273,7 @@ void UDPcomms::serverDNN()
 
 		ostringstream ss;
 		float confidenceThreshold = 0.2;
-                idx_class[0] = detectionMat.rows;
+                //idx_class[0] = detectionMat.rows;
 		cout<<"No. of objects = "<< detectionMat.rows<<endl;
 		//int signal = 444;
 		//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
@@ -273,26 +283,34 @@ void UDPcomms::serverDNN()
 			float confidence = detectionMat.at<float>(i, 2);
 			if (confidence > confidenceThreshold)
 			{
+				count = count + 1;
 				int idx = static_cast<int>(detectionMat.at<float>(i, 1));
-				int obj[5];
 				int xLeftBottom = static_cast<int>(detectionMat.at<float>(i, 3) * frame.cols);
 				int yLeftBottom = static_cast<int>(detectionMat.at<float>(i, 4) * frame.rows);
 				int xRightTop = static_cast<int>(detectionMat.at<float>(i, 5) * frame.cols);
 				int yRightTop = static_cast<int>(detectionMat.at<float>(i, 6) * frame.rows);
-				obj[0] = idx;
-				obj[1] = xLeftBottom;
-				obj[2] = yLeftBottom;
-				obj[3] = xRightTop;
-				obj[4] = yRightTop;
+                                if(count < 16)
+				{
+					object_class[count]     = idx;
+					object_class[count + 1] = xLeftBottom;
+					object_class[count + 2] = yLeftBottom;
+					object_class[count + 3] = xRightTop;
+					object_class[count + 4] = yRightTop;
+        	                        count = count + 5;
+				}
 
 				Rect object((int)xLeftBottom, (int)yLeftBottom,(int)(xRightTop - xLeftBottom),(int)(yRightTop - yLeftBottom));
 
 				rectangle(frame, object, Scalar(0, 255, 0), 2);
 
-				cout << i<<">"<<CLASSES[obj[0]] << ": " << confidence << endl;
-                                cout << "Loc : "<<obj[1]<<","<<obj[2]<<","<<obj[3]<<","<<obj[4]<<endl;
+				cout << i<<">"<<CLASSES[object_class[count - 5]] << ": " << confidence << endl;
+                                cout << "Loc : "<<object_class[count - 4]
+				<<","<<object_class[count - 3]
+				<<","<<object_class[count - 2]
+				<<","<<object_class[count - 1]
+				<<endl;
 
-				idx_class[i+1] = idx;
+				//idx_class[i+1] = idx;
 				//signal = 555;
 				//sock.sendTo(& signal,sizeof(int), sourceAddress, sourcePort);
 				//for (int i = 0; i < 5; i++)
@@ -314,7 +332,7 @@ void UDPcomms::serverDNN()
 			}
 		}
 		//cout<<"classes"<<idx_class[1]<<","<<idx_class[2]<<endl;
-                //sock.sendTo(&idx_class[10], 10*sizeof(int), sourceAddress, sourcePort);
+                sock.sendTo(& object_class[0], buffer_size, sourceAddress, sourcePort);
 		imshow("Live",frame);
 		int key = cv::waitKey(5);
 		key = (key==255) ? -1 : key; //#Solve bug in 3.2.0
