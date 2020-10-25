@@ -86,9 +86,9 @@ int main (void)
 	//SetGPIOpwm(gpio5,gpio6);
 	
 	direction = 0;
-	std::cout<<"Enter 1 for continuous control\n"<<"Enter 2 for burst control\n"<<endl;
-	std::cin>>control_mode;
-	
+	//std::cout<<"Enter 1 for continuous control\n"<<"Enter 2 for burst control\n"<<endl;
+	//std::cin>>control_mode;
+	control_mode = 2
 	if(control_mode == continuous_control){
 		std::cout<<"Enter speed:\n"<<endl;
 		std::cin>>power;
