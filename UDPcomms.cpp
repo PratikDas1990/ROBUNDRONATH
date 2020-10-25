@@ -31,11 +31,6 @@ using namespace cv;
 using namespace cv::dnn;
 using namespace std;
 
-string CLASSES[] = {"background", "aeroplane", "bicycle", "bird", "boat",
-	"bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
-	"dog", "horse", "motorbike", "person", "pottedplant", "sheep",
-	"sofa", "train", "tvmonitor"};
-
 
 void UDPcomms::client()
 {

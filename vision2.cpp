@@ -24,9 +24,9 @@ vision::vision(){
 	int debug_mode;
 	const int yes = 1;
 	const int no = 0;
-	cout<<"Run on debug mode?(yes =1 , no = 0)"<<"\n";
-	cin>>debug_mode;
-	
+	//cout<<"Run on debug mode?(yes =1 , no = 0)"<<"\n";
+	//cin>>debug_mode;
+	debug_mode = 0;
 	if(debug_mode == yes){
 		capture = cvCaptureFromCAM(0);//Initiate CvCapture structure for reading a video stream from the camera
 		cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_WIDTH, 640 );
