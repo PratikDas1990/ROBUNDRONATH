@@ -81,6 +81,7 @@ int main (void)
 	const int y_axis              = 20;
 		
 	direction = 0;
+	pi.look(lookforward);
 	while(1){
 		count = 0;
 		//count_nomovement =0;
