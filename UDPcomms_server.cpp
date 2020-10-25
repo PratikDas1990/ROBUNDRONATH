@@ -36,7 +36,6 @@ using namespace cv;
 using namespace cv::dnn;
 using namespace std;
 
-
 void UDPcomms::server()
 {
     unsigned short servPort = atoi("2000");//(argv[1]); // First arg:  local port
@@ -87,7 +86,6 @@ void UDPcomms::server()
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
             cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
 
-            //cout << next_cycle - last_cycle;
             last_cycle = next_cycle;
         }
     } catch (SocketException & e) {
@@ -106,7 +104,6 @@ void UDPcomms::serverDNN()
         UDPSocket sock(servPort);
 	//TCPcomms comm_server;
 	//comm_server.setup_server();
-
         char buffer[BUF_LEN]; // Buffer for echo string
         int recvMsgSize; // Size of received message
         string sourceAddress; // Address of datagram source
@@ -159,13 +156,13 @@ void UDPcomms::serverDNN()
             }
 
             cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
-            //system("rm object.txt");//delete the object class file 
             Mat rawData = Mat(1, PACK_SIZE * total_pack, CV_8UC1, longbuf);
             Mat frame = imdecode(rawData, IMREAD_COLOR);
             if (frame.size().width == 0) {
                 cerr << "decode failure!" << endl;
                 continue;
             }
+            //imshow("recv", frame);
 
 
 		Mat img2;
