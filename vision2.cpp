@@ -24,9 +24,9 @@ vision::vision(){
 	int debug_mode;
 	const int yes = 1;
 	const int no = 0;
-	//cout<<"Run on debug mode?(yes =1 , no = 0)"<<"\n";
-	//cin>>debug_mode;
-	debug_mode = 0;
+	cout<<"Run on debug mode?(yes =1 , no = 0)"<<"\n";
+	cin>>debug_mode;
+	//debug_mode = 0;
 	if(debug_mode == yes){
 		capture = cvCaptureFromCAM(0);//Initiate CvCapture structure for reading a video stream from the camera
 		cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_WIDTH, 640 );
@@ -38,12 +38,12 @@ vision::vision(){
 		std::cout<<"Value:"<<env[4]<<" - "<<env[5]<<endl;*/
 	}
 	else{
-		env[0]= 35.0;
-		env[1]= 100.0;
-		env[2]= 125.0;
+		env[0]= 50.0;
+		env[1]= 70.0;
+		env[2]= 120.0;
 		env[3]= 255.0;
-		env[4]= 33.0;
-		env[5]= 163.0;
+		env[4]= 30.0;
+		env[5]= 200.0;
 	        pointer_env = env;	
 	}
 
@@ -70,14 +70,14 @@ double* vision::set_env() {
 	int lowB = 25;					// Set Value
 	int highB = 255;
 	
-	int lowH = 35;					// Set Hue
-	int highH = 100;
+	int lowH = 50;					// Set Hue
+	int highH = 70;
 
-	int lowS = 125;					// Set Saturation
+	int lowS = 120;					// Set Saturation
 	int highS = 255;
 
-	int lowV = 33;					// Set Value
-	int highV = 163;
+	int lowV = 30;					// Set Value
+	int highV = 200;
 
 	//int lowH = 0;					// Set Hue
 	//int highH = 8;

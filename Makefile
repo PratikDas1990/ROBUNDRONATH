@@ -1,7 +1,7 @@
 CFLAGS=-O2 -g `pkg-config --cflags opencv`
 LDFLAGS=`pkg-config --libs opencv`
 
-all: GETBALL5
+all: GETBALL
 
 RCBOT: RCBot2.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o
 	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o -I/usr/include/python3.7/ RCBot2.cpp -I/usr/local/include -L/usr/local/lib -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lwiringPi -lpthread -lpython3.7 -o RCBot2.exe
@@ -9,14 +9,10 @@ RCBOT: RCBot2.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o
 AUTOBOT: AUTOBot2.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o
 	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o -I/usr/include/python3.7/ AUTOBot2.cpp -I/usr/local/include -L/usr/local/lib -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lwiringPi -lpthread -lpython3.7 -o AUTOBot.exe
 
-GETBALL4: getball4.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision1.o
-	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision1.o -I/usr/include/python3.7/ getball4.cpp $(CFLAGS) $(LDFLAGS) -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lpython3.7 -lwiringPi -lpthread -o GETBALL4.exe
 
-GETBALL5: getball5.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision2.o
-	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision2.o -I/usr/include/python3.7/ getball5.cpp $(CFLAGS) $(LDFLAGS) -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lpython3.7 -lwiringPi -lpthread -o GETBALL5.exe
+GETBALL: getball5.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision2.o
+	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision2.o -I/usr/include/python3.7/ getball5.cpp $(CFLAGS) $(LDFLAGS) -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lpython3.7 -lwiringPi -lpthread -o GETBALL.exe
 
-GETBALL: getball2.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision1.o
-	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o vision1.o -I/usr/include/python3.7/ getball2.cpp $(CFLAGS) $(LDFLAGS) -L/usr/lib/python3.7/config-3.7m-arm-linux-gnueabihf -lpython3.7 -lwiringPi -lpthread -o GETBALL.exe
 
 GETSPEED: GetSpeed.cpp GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o
 	g++ GPIOClassDef.o GPIOFunDef.o GOPIFunDef.o GetSpeed.cpp -I/usr/local/include -L/usr/local/lib -lwiringPi -lpthread -o GetSpeed.exe

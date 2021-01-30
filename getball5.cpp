@@ -75,6 +75,11 @@ int main (void)
 
 	halt_time = 4.9;
 	movement_time = 1.2;
+
+        direction = 0;
+        look_x   = 90;
+        look_y   = 110;
+        pi.look(look_x,look_y);;
   
 	vision ball;
 	
@@ -90,10 +95,6 @@ int main (void)
 	
 	//SetGPIOpwm(gpio5,gpio6);
 	
-	direction = 0;
-	look_x   = 90;
-	look_y   = 90;
-	pi.look(look_x,look_y);;
 
 	while(1){
 		//count = 0;
@@ -179,38 +180,38 @@ int main (void)
 
 		if(ball_in_left == 1){
 			cout<<"turn left"<<"\n";
-			pi.move_bot(GOleft,2.5*second,460);
+			pi.move_bot(GOleft,2.0*second,460);
 			//usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_right == 1){
 			cout<<"turn right"<<"\n";
-			pi.move_bot(GOright,2.5*second,460);
+			pi.move_bot(GOright,2.0*second,460);
 			//usleep(1.0*second);
 			continue;
 		}
 
 		else if(ball_in_double_left == 1){
 			cout<<"turn double left"<<"\n";
-			pi.move_bot(GOleft,3.0*second,460);
+			pi.move_bot(GOleft,2.5*second,460);
 			//usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_double_right == 1){
 			cout<<"turn double right"<<"\n";
-			pi.move_bot(GOright,3.0*second,460);
+			pi.move_bot(GOright,2.5*second,460);
 			usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_triple_left == 1){
 			cout<<"turn triple left"<<"\n";
-			pi.move_bot(GOleft,3.5*second,460);
+			pi.move_bot(GOleft,3.2*second,460);
 			//usleep(1.0*second);
 			continue;
 		}
 		else if(ball_in_triple_right == 1){
 			cout<<"turn triple right"<<"\n";
-			pi.move_bot(GOright,3.5*second,460);
+			pi.move_bot(GOright,3.2*second,460);
 			//usleep(1.0*second);
 			continue;
 		}
