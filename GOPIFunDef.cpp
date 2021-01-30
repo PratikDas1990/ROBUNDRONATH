@@ -443,25 +443,25 @@ double GOPI::right_wheel_speed()
 int GOPI::get_power(double distance){
 	int power;
 	if(distance >= 700){
-		power = 380;
+		power = 400;
 	}	
 	if(distance >= 100.0 && distance<700){
-		power = 450;
+		power = 480;
 	}
 	else if(distance >= 70.0 && distance < 100.0){
-		power = 420;
+		power = 440;
 	}
 	else if(distance >= 50.0 && distance < 70.0){
-		power = 400;
+		power = 420;
 	}
 	else if(distance >= 30 && distance < 50.0){
-		power = 380;
+		power = 400;
 	}
 	else if(distance >= 10 && distance < 30.0){
-		power = 370;
+		power = 390;
 	}
 	else if(distance  < 10.0){
-		power = 370;
+		power = 380;
 	}
 	std::cout<<"Power ::"<<power<<endl;
 	return power;

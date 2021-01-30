@@ -158,14 +158,15 @@ int main (void)
 //					direction = GOright*random_decision + GOleft*(1 - random_decision);
 
 					do{
+						power = 450;
 						last_distance = distance;
-						pi.move_bot(direction,movement_time*second,450);
+						pi.move_bot(direction,movement_time*second,power);
 						pi.move_bot(halt);
 						delay(1000);
 						distance =pi.get_distance();
 						change_in_distance = abs(last_distance - distance);
 						if(change_in_distance ==0 && 0.5*(pi.left_wheel_speed()+pi.right_wheel_speed()) < 20.0){
-							pi.move_bot(GObackward,movement_time*second,450);
+							pi.move_bot(GObackward,movement_time*second,500);
 						}
 					}while(distance < 20 || distance > 1300);
 				}
@@ -189,12 +190,12 @@ int main (void)
 //					random_decision = rand()%2;
 //					direction = GOright*random_decision + GOleft*(1 - random_decision);
 					pi.move_bot(halt);
-					power = 380;
+					power = 450;
 					if(change_in_distance == 0){
 						pi.move_bot(GObackward,halt_time*second,power);
 					}
 					delay(1000);
-					pi.move_bot(direction,movement_time*second,450);
+					pi.move_bot(direction,movement_time*second,power);
 					delay(1000);
 		
 				}

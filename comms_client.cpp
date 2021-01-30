@@ -21,7 +21,7 @@ int main(void)
 	comm.client();
 //	comm.client_single();
 	//Read from object.txt
-        system("scp pratik@192.168.0.20:~/AutoBot18/object.txt ./");
+        system("scp pratik@10.0.0.241:~/AutoBot18/object.txt ./");
         fstream file;
         int x;
 	int object_class[15];
