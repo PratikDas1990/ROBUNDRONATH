@@ -42,7 +42,8 @@ void UDPcomms::client()
 {
     int object_class[15];
 
-    string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+   //string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+   string servAddress = "10.0.0.183";//argv[1]; // First arg: server address
    // string servAddress = "192.168.0.20";//a
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
@@ -137,7 +138,8 @@ void UDPcomms::client()
 void UDPcomms::client_single()
 {
     int object_class[15];
-    string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+    //string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+    string servAddress = "10.0.0.183";//argv[1]; // First arg: server address
     //string servAddress = "192.168.0.20";//a
     unsigned short servPort = Socket::resolveService("2000","udp");//(argv[2], "udp");
 
@@ -199,7 +201,8 @@ void UDPcomms::sendDATA()
 {
     int x;
     fstream file;
-    string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+   // string servAddress = "10.0.0.241";//argv[1]; // First arg: server address
+    string servAddress = "10.0.0.183";//argv[1]; // First arg: server address
    // string servAddress = "192.168.0.100";
     unsigned short servPort = Socket::resolveService("3000","udp");//(argv[2], "udp");
 
