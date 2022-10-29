@@ -135,7 +135,7 @@ void GOPI::move_bot(int direction,int power)
 	const int halt    = 10;
 
 	powerR = power;
-	powerL = power;//*(400 - 20)/400;
+	powerL = power*(400 - 60)/400;
 	pwmWrite(13,powerR);
 	pwmWrite(18,powerL);	
 
