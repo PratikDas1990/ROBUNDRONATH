@@ -87,27 +87,27 @@ void GOPI::move_bot(int direction)
         		
 		case GOforward:{	 
 	                cout << "FORWARD"<<endl;
-	                gpio12->setval_gpio("1");
-			gpio16->setval_gpio("1");
+	                gpio19->setval_gpio("1");
+			gpio26->setval_gpio("1");
 	                break;
 		}
 			 
 		case GOleft:{			 
 			cout << "LEFT"<<endl;
-			gpio12->setval_gpio("1");
-			gpio19->setval_gpio("1");
-			break;
-		}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 		}
+		case GOright:{	 
+			cout << "RIGHT"<<endl;
+			gpio19->setval_gpio("1");
+			gpio12->setval_gpio("1");
+			break;
+		}
 		case GObackward:{
 			cout << "BACKWARD"<<endl;
-			gpio19->setval_gpio("1");
-			gpio26->setval_gpio("1");
+			gpio16->setval_gpio("1");
+			gpio12->setval_gpio("1");
 			break;
 		}
 		case halt:{
@@ -148,8 +148,8 @@ void GOPI::move_bot(int direction,int power)
         		
 		case GOforward:{	 
 	        cout << "FORWARD"<<endl;
-        	gpio12->setval_gpio("1");
-			gpio16->setval_gpio("1");
+        	gpio19->setval_gpio("1");
+		gpio26->setval_gpio("1");
 			/*err_correct_direction = correct_direction(power);
 			if(err_correct_direction == 1){
 				cout << "err_correct_direction"<<endl;
@@ -162,20 +162,20 @@ void GOPI::move_bot(int direction,int power)
 			}
 		case GOleft:{			 
 			cout << "LEFT"<<endl;
-			gpio12->setval_gpio("1");
-			gpio19->setval_gpio("1");
-			break;
-			}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 			}
+		case GOright:{	 
+			cout << "RIGHT"<<endl;
+			gpio12->setval_gpio("1");
+			gpio19->setval_gpio("1");
+			break;
+			}
 		case GObackward:{
 			cout << "BACKWARD"<<endl;
-			gpio19->setval_gpio("1");
-			gpio26->setval_gpio("1");
+			gpio12->setval_gpio("1");
+			gpio16->setval_gpio("1");
 			break;
 			}
 		case halt:{
@@ -208,30 +208,30 @@ void GOPI::move_bot(int direction,long double halt_time,int power)
 	
 	switch(direction){
         		
-		case GOforward:{	 
-	                cout << "FORWARD"<<endl;
+		case GObackward:{	 
+	                cout << "BACKWARD"<<endl;
 	                gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
 			 
-		case GOleft:{			 
-	                cout << "LEFT"<<endl;
+		case GOright:{			 
+	                cout << "RIGHT"<<endl;
 	                gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
-		case GOright:{	 
-	                cout << "RIGHT"<<endl;
+		case GOleft:{	 
+	                cout << "LEFT"<<endl;
 	                gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			usleep(halt_time);
@@ -276,8 +276,8 @@ void GOPI::move_bot(int direction,int power,double distance)
 	gpio26->setval_gpio("0");
 	switch(direction){
         		
-		case GOforward:{	 
-			cout << "FORWARD"<<endl;
+		case GObackward:{	 
+			cout << "BACKWARD"<<endl;
         	gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 			if(distance >= 100){
@@ -292,20 +292,20 @@ void GOPI::move_bot(int direction,int power,double distance)
 			}
         	break;
 		}
-		case GOleft:{			 
-			cout << "LEFT"<<endl;
+		case GOright:{			 
+			cout << "RIGHT"<<endl;
 			gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			break;
 		}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
+		case GOleft:{	 
+			cout << "LEFT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 		}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
@@ -494,14 +494,6 @@ void GOPI::look(int x_direction,int y_direction)
         return;
 }
 
-
-
-
-
-
-
-
-
 void move_bot(int direction,GPIOClass* gpio12,GPIOClass* gpio16,GPIOClass* gpio19,GPIOClass* gpio26)
 {
 	const int GOforward = 1;
@@ -517,27 +509,27 @@ void move_bot(int direction,GPIOClass* gpio12,GPIOClass* gpio16,GPIOClass* gpio1
 
 	switch(direction){
         		
-		case GOforward:{	 
-	                cout << "FORWARD"<<endl;
+		case GObackward:{	 
+	                cout << "BACKWARD"<<endl;
 	                gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 	                break;
 		}
 			 
-		case GOleft:{			 
-			cout << "LEFT"<<endl;
+		case GOright:{			 
+			cout << "RIGHT"<<endl;
 			gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			break;
 		}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
+		case GOleft:{	 
+			cout << "LEFT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 		}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
@@ -570,30 +562,30 @@ void move_bot(int direction,long double halt_time,int power,GPIOClass* gpio12,GP
 	
 	switch(direction){
         		
-		case GOforward:{	 
-	                cout << "FORWARD"<<endl;
+		case GObackward:{	 
+	                cout << "BACKWARD"<<endl;
 	                gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
 			 
-		case GOleft:{			 
-	                cout << "LEFT"<<endl;
+		case GOright:{			 
+	                cout << "RIGHT"<<endl;
 	                gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
-		case GOright:{	 
-	                cout << "RIGHT"<<endl;
+		case GOleft:{	 
+	                cout << "LEFT"<<endl;
 	                gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			usleep(halt_time);
 			break;
 		}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			usleep(halt_time);
@@ -639,8 +631,8 @@ void move_bot(int direction,int power,GPIOClass* gpio12,GPIOClass* gpio16,GPIOCl
 	gpio26->setval_gpio("0");
 	switch(direction){
         		
-		case GOforward:{	 
-	        cout << "FORWARD"<<endl;
+		case GObackward:{	 
+	        cout << "BACKWARD"<<endl;
         	gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 			/*err_correct_direction = correct_direction(power);
@@ -653,20 +645,20 @@ void move_bot(int direction,int power,GPIOClass* gpio12,GPIOClass* gpio16,GPIOCl
 			}*/
         	break;
 			}
-		case GOleft:{			 
-			cout << "LEFT"<<endl;
+		case GOright:{			 
+			cout << "RIGHT"<<endl;
 			gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			break;
 			}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
+		case GOleft:{	 
+			cout << "LEFT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 			}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
@@ -709,8 +701,8 @@ void move_bot(int direction,int power,double distance, GPIOClass* gpio12,GPIOCla
 	gpio26->setval_gpio("0");
 	switch(direction){
         		
-		case GOforward:{	 
-			cout << "FORWARD"<<endl;
+		case GObackward:{	 
+			cout << "BACKWARD"<<endl;
         	gpio12->setval_gpio("1");
 			gpio16->setval_gpio("1");
 			if(distance >= 100){
@@ -725,20 +717,20 @@ void move_bot(int direction,int power,double distance, GPIOClass* gpio12,GPIOCla
 			}
         	break;
 		}
-		case GOleft:{			 
-			cout << "LEFT"<<endl;
+		case GOright:{			 
+			cout << "RIGHT"<<endl;
 			gpio12->setval_gpio("1");
 			gpio19->setval_gpio("1");
 			break;
 		}
-		case GOright:{	 
-			cout << "RIGHT"<<endl;
+		case GOleft:{	 
+			cout << "LEFT"<<endl;
 			gpio16->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
 		}
-		case GObackward:{
-			cout << "BACKWARD"<<endl;
+		case GOforward:{
+			cout << "FORWARD"<<endl;
 			gpio19->setval_gpio("1");
 			gpio26->setval_gpio("1");
 			break;
